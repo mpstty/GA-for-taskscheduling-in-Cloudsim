@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- establishment.xml created by mazw at 20180302 -->
+<establishment>
+	<datacenter id="DC01" valid="true">
+		<name>datacenter_1</name>
+		<count>1</count>
+		<arch>x86</arch>
+		<os>Linux</os>
+		<vmm>Xen</vmm>
+		<timezone>10.0</timezone>
+		<!--policy type="vmallocation">lab.cloudsim.taskscheduling.VmAllocationPolicyNew</policy-->
+		<policy type="vmallocation">org.cloudbus.cloudsim.VmAllocationPolicySimple</policy>
+		<cost>
+			<proc>3.0</proc>
+            <memory>0.05</memory>
+            <storage>0.1</storage>
+            <bandwidth>0.1</bandwidth>
+        </cost>
+        <hosts gid="HL11" valid="true">
+			<count>8</count>
+            <pes>2</pes>
+            <mips>1000</mips>
+            <ram>20480</ram>
+            <storage>1000000</storage>
+            <bandwidth>10000</bandwidth>
+			<policy type="vmscheduler">org.cloudbus.cloudsim.VmSchedulerSpaceShared</policy>
+        </hosts>
+        <hosts gid="HL12" valid="false">
+			<count>4</count>
+            <pes>2</pes>
+            <mips>1000</mips>
+            <ram>20480</ram>
+            <storage>1000000</storage>
+            <bandwidth>10000</bandwidth>
+			<policy type="vmscheduler">org.cloudbus.cloudsim.VmSchedulerTimeShared</policy>
+        </hosts>
+	</datacenter>
+
+	<datacenter id="DC02" valid="false">
+		<name>datacenter_2</name>
+		<count>1</count>
+		<arch>ia64</arch>
+		<os>Windows</os>
+		<vmm>Hyper-V</vmm>
+		<timezone>10.0</timezone>
+		<policy type="vmallocation">lab.cloudsim.taskscheduling.VmAllocationPolicyNew</policy>
+		<!--policy type="vmallocation">org.cloudbus.cloudsim.VmAllocationPolicySimple</policy-->
+		<cost>
+			<proc>2.0</proc>
+            <memory>0.06</memory>
+            <storage>0.2</storage>
+            <bandwidth>0.1</bandwidth>
+        </cost>
+        <hosts gid="HL21" valid="true">
+			<count>2</count>
+            <pes>2</pes>
+            <mips>500</mips>
+            <ram>20480</ram>
+            <storage>1000000</storage>
+            <bandwidth>10000</bandwidth>
+			<policy type="vmscheduler">org.cloudbus.cloudsim.VmSchedulerTimeShared</policy>
+        </hosts>
+        <hosts gid="HL22" valid="false">
+			<count>4</count>
+            <pes>2</pes>
+            <mips>500</mips>
+            <ram>20480</ram>
+            <storage>1000000</storage>
+            <bandwidth>10000</bandwidth>
+			<policy type="vmscheduler">org.cloudbus.cloudsim.VmSchedulerSpaceShared</policy>
+        </hosts>
+	</datacenter>
+
+	<broker id="BK01" valid="false">
+		<name>broker_1</name>
+		<policy name="datacenterbroker">org.cloudbus.cloudsim.DatacenterBroker</policy>
+		<cloudlets gid="CL21" valid="true">
+			<count>50</count>
+			<length>100</length>
+            <inputsize>300</inputsize>
+            <outputsize>300</outputsize>
+			<pes>1</pes>
+			<policy name="utilizationmodel">org.cloudbus.cloudsim.UtilizationModelStochastic</policy>
+		</cloudlets>
+
+		<cloudlets gid="CL22" valid="true">
+			<count>50</count>
+			<length>100</length>
+            <inputsize>300</inputsize>
+            <outputsize>300</outputsize>
+			<pes>1</pes>
+			<policy name="utilizationmodel">org.cloudbus.cloudsim.UtilizationModelFull</policy>
+		</cloudlets>
+
+		<vms gid="VM21" valid="true">
+			<count>8</count>
+			<imagesize>10000</imagesize>
+			<ram>512</ram>
+			<mips>500</mips>
+			<bandwidth>1000</bandwidth>
+			<pes>1</pes>
+			<vmm>Hyper-V</vmm>
+			<!--policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerSpaceShared</policy-->
+			<policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerTimeShared</policy>
+			<!--policy name="cloudletscheduler">lab.cloudsim.taskscheduling.CloudletSchedulerSpaceSharedRR</policy-->
+		</vms>
+
+		<vms gid="VM22" valid="false">
+			<count>8</count>
+			<imagesize>10000</imagesize>
+			<ram>512</ram>
+			<mips>250</mips>
+			<bandwidth>1000</bandwidth>
+			<pes>1</pes>
+			<vmm>Xen</vmm>
+			<policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerTimeShared</policy>
+			<!--policy name="cloudletscheduler">lab.cloudsim.taskscheduling.CloudletSchedulerTimeSharedRR</policy-->
+		</vms>
+
+	</broker>
+
+	<broker id="BK02" valid="true">
+		<name>broker_2</name>
+		<policy name="datacenterbroker">org.cloudbus.cloudsim.DatacenterBroker</policy>
+		<!--
+		<policy name="datacenterbrokertsga">lab.cloudsim.taskscheduling.DatacenterBrokerGA</policy>
+		-->
+		<bindvmcloudlet>lab.cloudsim.taskscheduling.GA.Scheduler</bindvmcloudlet>
+
+		<cloudlets gid="CL22" valid="true">
+			<count>100</count>
+			<length>5000</length>
+            <inputsize>300</inputsize>
+            <outputsize>300</outputsize>
+			<pes>1</pes>
+			<policy name="utilizationmodel">org.cloudbus.cloudsim.UtilizationModelFull</policy>
+			<!--policy name="utilizationmodel">org.cloudbus.cloudsim.UtilizationModelStochastic</policy-->
+		</cloudlets>
+
+		<vms gid="VM21" valid="true">
+			<count>8</count>
+			<imagesize>10000</imagesize>
+			<ram>512</ram>
+			<mips>250</mips>
+			<bandwidth>1000</bandwidth>
+			<pes>1</pes>
+			<vmm>Hyper-V</vmm>
+			<!--policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerSpaceShared</policy-->
+			<policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerTimeShared</policy>
+			<!--policy name="cloudletscheduler">lab.cloudsim.taskscheduling.CloudletSchedulerTimeSharedRR</policy-->
+		</vms>
+
+		<vms gid="VM22" valid="false">
+			<count>2</count>
+			<imagesize>10000</imagesize>
+			<ram>512</ram>
+			<mips>400</mips>
+			<bandwidth>1000</bandwidth>
+			<pes>1</pes>
+			<vmm>Xen</vmm>
+			<policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerSpaceShared</policy>
+			<!--policy name="cloudletscheduler">lab.cloudsim.taskscheduling.CloudletSchedulerTimeSharedRR</policy-->
+		</vms>
+
+		<vms gid="VM23" valid="false">
+			<count>2</count>
+			<imagesize>10000</imagesize>
+			<ram>512</ram>
+			<mips>500</mips>
+			<bandwidth>1000</bandwidth>
+			<pes>1</pes>
+			<vmm>Xen</vmm>
+			<policy name="cloudletscheduler">org.cloudbus.cloudsim.CloudletSchedulerSpaceShared</policy>
+			<!--policy name="cloudletscheduler">lab.cloudsim.taskscheduling.CloudletSchedulerTimeSharedRR</policy-->
+		</vms>
+	</broker>
+	
+</establishment> 

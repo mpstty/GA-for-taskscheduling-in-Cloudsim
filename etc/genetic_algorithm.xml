@@ -1,0 +1,34 @@
+<!--created by mazw at 20180320-->
+<parameters>
+	<option>tsga-A</option>
+	<population>
+		<size>60</size>
+		<subsize>2</subsize>
+		<generation>50</generation>
+	</population>
+	<tournament>
+		<probability>0.75</probability>
+		<size>2</size>
+	</tournament>
+	<selection>
+		<policy>Tournament</policy>
+		<!--
+		<policy>Roulette-Wheel</policy>
+		<policy>Randomly</policy>
+		<policy>Best-Two</policy>
+		-->
+	</selection>
+	<crossover>
+		<policy>One-Point</policy>
+		<!--policy>Two-Point</policy-->
+		<!--policy>Uniformly</policy-->
+		<rate>1.0</rate>
+	</crossover>
+	<mutation>
+		<!--
+		<policy>RandomChange</policy>
+		-->
+		<policy>Interchange</policy>
+		<rate>0.9</rate>
+	</mutation>
+</parameters>
