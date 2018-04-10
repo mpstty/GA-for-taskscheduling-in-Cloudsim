@@ -10,3 +10,10 @@ Components of Cloudsim being used (Note, no power is considered):
 3. Datacenter: vmallocationpolicy
 4. Host: vmscheduler
 5. Vm: utilizationmodel
+
+
+To Build and run by Apache-Ant:
+ $ ant 
+ $ ant ga
+
+
