@@ -5,11 +5,11 @@ Before submitting cloudlets, Broker can assign cloudlets to virtual machines, wh
 Hence, Genetic algorithm can be used to create the binding relationship.
 
 Components of Cloudsim being used (Note, no power is considered):
-1. Cloudlets
+1. Cloudlet: utilizationmodel
 2. Broker: datacenterbroker
 3. Datacenter: vmallocationpolicy
 4. Host: vmscheduler
-5. Vm: utilizationmodel
+5. Vm: cloudletscheduler 
 
 
 To Build and run by Apache-Ant:
