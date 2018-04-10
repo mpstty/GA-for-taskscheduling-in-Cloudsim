@@ -13,8 +13,9 @@ Components of Cloudsim being used (no particular power model):
 
 
 To Build and run by Apache-Ant:
- $ ant 
+ $ ant
  $ ant ga
+ 
  
 
 
