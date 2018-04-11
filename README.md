@@ -2,20 +2,8 @@
 Test the taskscheduling using genetic algorithm, with a purpose of reducing completion time of tasks.
 
 Before submitting cloudlets, Broker can assign cloudlets to virtual machines, which is a NP-hard problem.
-Hence, Genetic algorithm can be used to create the binding relationship which can reduce time to complete tasks.
-
-Components of Cloudsim being used:
-1. Cloudlet: utilizationmodel
-2. Broker: datacenterbroker
-3. Datacenter: vmallocationpolicy
-4. Host: vmscheduler
-5. Vm: cloudletscheduler 
+Hence, Genetic algorithm can be used to create a binding relationship which can reduce time to complete tasks.
 
 
-To Build and run by Apache-Ant:
- $ ant
- $ ant ga
- 
- 
 
 
