@@ -131,6 +131,7 @@ public class Population {
 		return false;
 	}
 	
+	//TODO: enlarge the sub-population size
 	public List<Individual> Selection(){
 		Individual ib1st = null;
 		Individual ib2nd = null;
@@ -173,22 +174,21 @@ public class Population {
 		double totFitvalue = 0.00;
 		int curSize = GetIndividuals().size();
 		indvFitnessPortions = new double[curSize+1];
-			for(Individual indv: GetIndividuals()){
-				totFitvalue += indv.Fitness();
-			}
-			indvFitnessPortions[0] = 0.00;
+		for(Individual indv: GetIndividuals()){
+			totFitvalue += indv.Fitness();
+		}
+		indvFitnessPortions[0] = 0.00;
 
-			for (int i=1; i<=curSize; i++) {
-				indvFitnessPortions[i] = indvFitnessPortions[i-1] + 
-							(GetIndividuals().get(i-1).Fitness()/totFitvalue);
-			}
+		for (int i=1; i<=curSize; i++) {
+			indvFitnessPortions[i] = indvFitnessPortions[i-1] + 
+						(GetIndividuals().get(i-1).Fitness()/totFitvalue);
+		}
 
-			double lastProba = indvFitnessPortions[curSize];
-			if (Math.abs(lastProba - 1.0)>0.0001){//todo: preciseness
-				System.out.println("#ERROR: The sum of probabilities is not 1.00 but " + 
-									lastProba);//todo: throw new Exception("");
-			}
-
+		double lastProba = indvFitnessPortions[curSize];
+		if (Math.abs(lastProba - 1.0)>0.0001){//TODO: preciseness
+			System.out.println("#ERROR: The sum of probabilities is not 1.00 but " + 
+								lastProba);//TODO: throw new Exception("");
+		}
 	}
 
 	private Individual selectionRouletteWheel(){
@@ -215,6 +215,12 @@ public class Population {
 		Individual icheck = null;
 		int rn = 0;
 
+/* for particular test
+		if(currentOpt==5){
+			parameters.SetTournamentRate(0.75);
+			parameters.SetTournamentSize(2);
+		}
+*/
 		List<Individual> tournamentIndvs = new ArrayList<Individual>();
 		ibest = null;
 		for(int j=0; j<parameters.GetTournamentSize(); j++){
@@ -277,6 +283,7 @@ public class Population {
 					indv.mutationRandomChange();
 					break;
 				case "Interchange":
+					indv.Evaluate();//crossing genes
 					indv.mutationInterChange();
 					break;
 				default:
@@ -285,7 +292,6 @@ public class Population {
 		}
 		return GetSelecteds();
 	}
-
 
 	/*best in original cover worst in next */
 	public Population Replace(){
@@ -307,11 +313,12 @@ public class Population {
 
 		/* for special test */
 		int currentOpt = parameters.GetOption();
-		/* for special test 
+		/* for special test */
 		if(currentOpt==5){
 			indvAdd = FindTheBest(GetIndividuals()).Duplicate();
 			nextpop.increase(indvAdd);
-		}*/
+		}
+
 		if(parameters.GetSelectionPolicy() == "Roulette-Wheel"){
 			GenFitnessPortions();
 		}
@@ -320,26 +327,30 @@ public class Population {
 		while(totalSize<parameters.GetPopulationSize()){
 			indvAdd = null;
 			Selection();
-			/* for special test 
+			/* for special test */
 			if(currentOpt==5){
 				for(Individual indv: GetSelecteds()){
 					indvAdd = indv.Duplicate();//avoid reference
 					nextpop.increase(indvAdd);
 				}
-			}*/
+			}
 
 			Crossover();
 			Mutation();
 			for(Individual indv: GetSelecteds()){
-				indvAdd = indv.Duplicate();
+				indv.Evaluate();
 				nextpop.increase(GetSelecteds());
 			}
-			totalSize += 2;	
-			/* for special test 
+			//Replace();
 			if(currentOpt==2){
 				Replace();
-			}*/
-			Replace();
+			}
+			/* special
+			indvAdd = FindTheBest(GetSelecteds()).Duplicate();
+			nextpop.increase(indvAdd);
+			totalSize+=1;
+			*/
+			totalSize += GetSelecteds().size();	
 		}
 		nextpop.SetAge(++i);
 		return nextpop;
