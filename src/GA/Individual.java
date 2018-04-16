@@ -143,6 +143,7 @@ public class Individual {//implements Cloneable{
 			dup = indvs[0];	
 			this.Cover(dup);
 		}
+		dup.Evaluate();
 		return dup;
 	}
 
@@ -154,7 +155,6 @@ public class Individual {//implements Cloneable{
 		//Todo: copy the geneMap
 		old.fitValue=fitValue;
 		old.doneTime=doneTime;
-		old.Evaluate();
 		return old;
 	}
 
@@ -188,7 +188,6 @@ public class Individual {//implements Cloneable{
 		return geneMap;
 	}
 	
-
 	public int GenIdx(){
 		selfIdx = globalIdx++;
 		return selfIdx;
@@ -249,11 +248,6 @@ public class Individual {//implements Cloneable{
 		int i=0;
 		System.out.format("## Solution[%d]: Duration=%f, Fitness=%f %n",
 							Idx(),  Duration(), Fitness());
-/*
-		for(Atom atom: GetAtoms()){
-			atom.Show();
-		}
-*/
 		System.out.println(" ");
 
 		for(Entry<Integer, ArrayList<Atom>> entry: geneMap.entrySet()){
@@ -280,8 +274,6 @@ public class Individual {//implements Cloneable{
 			Atom g2 = b2.GetAtoms().get(j);
 			g1.SwapWith(g2);
 		}
-		b1.Evaluate();
-		b2.Evaluate();
 		return true;
 	}
 
@@ -305,8 +297,6 @@ public class Individual {//implements Cloneable{
 			Atom g2 = b2.GetAtoms().get(j);
 			g1.SwapWith(g2);
 		}
-		b1.Evaluate();
-		b2.Evaluate();
 		return true;
 	}
 
@@ -321,8 +311,6 @@ public class Individual {//implements Cloneable{
 					b1.GetAtoms().get(j).SwapWith(b2.GetAtoms().get(j));
 				}
 			}
-			b1.Evaluate();
-			b2.Evaluate();
 		}
 		return true;
 	}
@@ -339,7 +327,6 @@ public class Individual {//implements Cloneable{
 		Atom g1 = b1.GetAtoms().get(p1);
 		Atom g2 = b1.GetAtoms().get(p2);
 		g1.SwapWith(g2);
-		b1.Evaluate();
 		return true;
 	}
 
@@ -364,8 +351,6 @@ public class Individual {//implements Cloneable{
 		for(Atom atom: as2){
 			atom.SetVM(vm1);
 		}
-		Evaluate();
-
 		return true;
 	}
 
@@ -377,7 +362,6 @@ public class Individual {//implements Cloneable{
 				results.add(new Integer(atom.GetCloudlet().getCloudletId()));
 			}
 		}
-		
 		return results;
 	}
 }//end of Individual
