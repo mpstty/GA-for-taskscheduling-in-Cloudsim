@@ -75,17 +75,17 @@
 
 	<target name="ga" description="Genetic Algorithm" >
         <echo>        Executing "taskscheduling.jar" </echo>
-		<echo>    -------------------------------------- </echo>
+	<echo>    -------------------------------------- </echo>
         <echo>    | log file  : log/taskscheduling.log |</echo>
         <echo>    | configure : etc/establishment.xml  |</echo>
-		<echo>    -------------------------------------- </echo>
-		<echo/>
-		<java classname="lab.cloudsim.taskscheduling.Application" fork="false">
-			<classpath refid="classpath"/>
-			<classpath path="${class.dir}"/>
-			<arg value="log/taskscheduling.log"/>
-			<arg value="etc/establishment.xml"/>
-			<!--classpath location="${jar.dir}/taskscheduling.jar"/-->
-		</java>
-	</target>
+	<echo>    -------------------------------------- </echo>
+	<echo/>
+	<java classname="lab.cloudsim.taskscheduling.Application" fork="false">
+		<classpath refid="classpath"/>
+		<classpath path="${class.dir}"/>
+		<arg value="log/taskscheduling.log"/>
+		<arg value="etc/establishment.xml"/>
+		<!--classpath location="${jar.dir}/taskscheduling.jar"/-->
+	</java>
+    </target>
 </project>
