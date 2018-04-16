@@ -92,14 +92,15 @@ public class Application {
 		for(int i=0; i<totalVMs; i++) vtimeList[i] = 0.00;
 
 		Log.printLine();
+		Log.print(indent + indent + indent + indent);
 		Log.printLine("========== OUTPUT ==========");
-		Log.printLine(	"|Cloudlet ID "	+ indent + 
-						"|STATUS"		+ indent +
-						"|DC ID"		+ indent + 
-						"|VM ID"		+ indent + indent + 
-						"|Time"			+ indent + 
-						"|Start Time"	+ indent + 
-						"|Finish Time|");
+		Log.printLine(	"Cloudlet ID"	+ indent + 
+						"STATUS"		+ indent +
+						"DC ID"			+ indent + 
+						"VM ID"			+ indent +  
+						"Time"			+ indent + 
+						"Start "		+ indent + 
+						"Finish ");
 
 		DecimalFormat dft = new DecimalFormat("###.##");
 		for (int i = 0; i < size; i++) {
@@ -111,13 +112,13 @@ public class Application {
 			actualTime = cloudlet.getActualCPUTime();
 			vid = cloudlet.getVmId();
 
-			Log.printLine(indent + 
+			Log.printLine(indent +
 				cloudlet.getCloudletId()	+ indent + indent + 
-				status						+ indent + indent + 
-				cloudlet.getResourceId()	+ indent + indent +  
-				vid							+ indent + indent +  
-				dft.format(actualTime)		+ indent + indent + 
-				dft.format(startTime)		+ indent + indent +  
+				status						+ indent + indent +
+				cloudlet.getResourceId()	+ indent + indent +
+				vid							+ indent + 
+				dft.format(actualTime)		+ indent + 
+				dft.format(startTime)		+ indent + 
 				dft.format(doneTime));
 /* */
 
@@ -162,8 +163,8 @@ public class Application {
 			cloudletList.addAll(brokerArray.get(i).getCloudletReceivedList());
 			vmList.addAll(brokerArray.get(i).getVmList());
 		}
-        	CloudSim.stopSimulation();
-        	Log.printLine(Application.class.getName() + " finished!");
+        CloudSim.stopSimulation();
+        Log.printLine(Application.class.getName() + " finished!");
 	}
 
 	public static void main(String[] args) {
@@ -171,8 +172,8 @@ public class Application {
 		Application tsapp = new Application();//cloudletList, vmList);
 		tsapp.Logfile(args[0]);
 		tsapp.Run(args[1]);
-        	tsapp.PrintCloudlets();
-        	tsapp.PrintPerformances();
+        tsapp.PrintCloudlets();
+        tsapp.PrintPerformances();
 	}
 }
 
