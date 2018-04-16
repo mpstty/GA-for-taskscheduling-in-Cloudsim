@@ -32,78 +32,29 @@ import org.cloudbus.cloudsim.provisioners.PeProvisionerSimple;
 import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
 public class Application {
+	private double totalStartTime = 0.00;
+	private double totalDoneTime = 0.00;
+	private double totalActualTime = 0.00;
+	private int totalVMs = 0;//vms.size();//+1;//*2;
+	private final String indent = "    ";
+/*
+	private List<Cloudlet> ctsList = null;
+	private List<Vm> vmsList = null;
+*/
+	private List<Cloudlet> cloudletList = null;
+	private List<Vm> vmList = null;
 
-	private static void printVMsHostsDCs(List<Datacenter> dcs){
-		//TODO:
+	public Application(){
+		cloudletList = new LinkedList<Cloudlet>();
+		vmList = new LinkedList<Vm>();
 	}
-	
-	private static void printCloudletList(List<Cloudlet> list, List<Vm> vms) {
 
-		double total_over_time = 0.00;
-
-		int vm_count = vms.size()*2;
-		double[] vm_time = new double[vm_count];
-		for(int i=0; i<vm_count; i++){
-			vm_time[i]=0.00;
-		}
-		int size = list.size();
-		Cloudlet cloudlet = null;
-
-		String indent = "    ";
-		Log.printLine();
-		Log.printLine("========== OUTPUT ==========");
-		Log.printLine("Cloudlet ID" + indent + "STATUS" + indent +
-						"Data center ID" + indent + "VM ID" + indent + indent + 
-						"Time" + indent + "Start Time" + indent + "Finish Time");
-
-		DecimalFormat dft = new DecimalFormat("###.##");
-		for (int i = 0; i < size; i++) {
-			cloudlet = list.get(i);
-			Log.print(indent + cloudlet.getCloudletId() + indent + indent);
-
-			/* deprecation:
-			 * if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS){
-			 */
-			if (cloudlet.getStatus() == Cloudlet.SUCCESS){
-				Log.print("SUCCESS");
-			}
-			else{
-				Log.print("FAILED");
-			}
-		//	{
-				Log.printLine( indent + indent + 
-							cloudlet.getResourceId() + 
-								indent + indent + indent + 
-							cloudlet.getVmId() +
-								indent + indent + indent + 
-							dft.format(cloudlet.getActualCPUTime()) +
-								indent + indent + 
-							dft.format(cloudlet.getExecStartTime()) + 
-								indent + indent + indent + 
-							dft.format(cloudlet.getFinishTime()));
-		//	}
-
-			double tmpTime = cloudlet.getFinishTime();
-			total_over_time = tmpTime>total_over_time?tmpTime:total_over_time;
-
-			int indx = cloudlet.getVmId();
-			vm_time[indx] = vm_time[indx]>cloudlet.getActualCPUTime()?vm_time[indx]:cloudlet.getActualCPUTime();
-		}
-
-		double total_init_time = 0.00;
-		double total_busy_time = 0.00;
-
-		total_init_time = list.get(0).getExecStartTime();
-		total_over_time -= total_init_time;
-
-		for(int i=0; i<vm_count; i++){
-			total_busy_time += (vm_time[i]-total_init_time);
-		}
-		Log.formatLine("Utilization = [ total busy time / (total finish time * number of VMs)] * 100");
+	private void PrintPerformances(){
+		Log.formatLine("Utilization = [ Total_Busy_Time / (Total_Finish_Time * Number of VMs)] * 100");
 		
-		double utilization = 100 * total_busy_time/(total_over_time*vms.size());
+		double utilization = 100 * totalActualTime/(totalDoneTime*totalVMs);
 		Log.formatLine("Utilization = [ %f / ( %f * %d)] * 100 = %f", 
-							total_busy_time, total_over_time, vms.size(), utilization);
+							totalActualTime, totalDoneTime, totalVMs, utilization);
 
 		System.out.println("");
 		System.out.println("");
@@ -115,20 +66,75 @@ public class Application {
 							indent, indent, "Utilization", 
 							indent, indent, "Busy");
 		System.out.format("%s%s%.4f%s%s%.4f%s%s%s%.4f %n",
-							indent, indent, total_over_time,
+							indent, indent, totalDoneTime,
 							indent, indent, utilization,
-							indent, indent, indent, total_busy_time);
+							indent, indent, indent, totalActualTime);
 		System.out.println("");
 		System.out.println(indent+indent+"=============================================");
 
 		System.out.println("");
 		System.out.println("");
 	}
+	
+	private void PrintCloudlets(){
+		int size = cloudletList.size();
+		Cloudlet cloudlet = null;
+		String status = "";
 
-	private static void useLogfile(){
+		double startTime = 0.00;
+		double doneTime = 0.00;
+		double actualTime = 0.00;
+		int vid = 0;
+
+		totalStartTime = cloudletList.get(0).getExecStartTime();
+		totalVMs = vmList.size();
+		double[] vtimeList = new double[totalVMs];
+		for(int i=0; i<totalVMs; i++) vtimeList[i] = 0.00;
+
+		Log.printLine();
+		Log.printLine("========== OUTPUT ==========");
+		Log.printLine(	"|Cloudlet ID "	+ indent + 
+						"|STATUS"		+ indent +
+						"|DC ID"		+ indent + 
+						"|VM ID"		+ indent + indent + 
+						"|Time"			+ indent + 
+						"|Start Time"	+ indent + 
+						"|Finish Time|");
+
+		DecimalFormat dft = new DecimalFormat("###.##");
+		for (int i = 0; i < size; i++) {
+			cloudlet = cloudletList.get(i);
+			status = (cloudlet.getStatus() == Cloudlet.SUCCESS)?"SUCCESS":"FAILED";
+
+			startTime = cloudlet.getExecStartTime();
+			doneTime = cloudlet.getFinishTime();
+			actualTime = cloudlet.getActualCPUTime();
+			vid = cloudlet.getVmId();
+
+			Log.printLine(indent + 
+				cloudlet.getCloudletId()	+ indent + indent + 
+				status						+ indent + indent + 
+				cloudlet.getResourceId()	+ indent + indent +  
+				vid							+ indent + indent +  
+				dft.format(actualTime)		+ indent + indent + 
+				dft.format(startTime)		+ indent + indent +  
+				dft.format(doneTime));
+/* */
+
+			doneTime = cloudlet.getFinishTime();
+			totalDoneTime = doneTime>totalDoneTime?doneTime:totalDoneTime;
+			vtimeList[vid] = vtimeList[vid]>actualTime?vtimeList[vid]:actualTime;
+		}
+		totalDoneTime -= totalStartTime;
+		for(int i=0; i<totalVMs; i++){
+			totalActualTime += (vtimeList[i]-totalStartTime);
+		}
+	}
+
+	private void Logfile(String filename){
 		OutputStream logFile = null;
 		try{
-			logFile = new FileOutputStream("log/ga.log");
+			logFile = new FileOutputStream(filename);
 		}
 		catch(IOException e){
 			e.printStackTrace();
@@ -136,34 +142,37 @@ public class Application {
 		Log.setOutput(logFile);
 	}
 
-	public static void main(String[] args) {
+	private void Run(String confs){
 		boolean traced = false;
 		int users = 1;
 
-		useLogfile();
 		Log.printLine("Starting " + Application.class.getName() + "...");
 
 		Calendar calendar = Calendar.getInstance();	
 		CloudSim.init(users, calendar, traced); 
 
-		Establishment myEstConfig = new Establishment("etc/establishment.xml");
+		Establishment myEstConfig = new Establishment(confs);
 		
 		CloudSim.startSimulation();
 
-		List<Datacenter> dcArray = myEstConfig.datacenters;
+//		List<Datacenter> dcArray = myEstConfig.datacenters;
 		List<DatacenterBroker> brokerArray = myEstConfig.datacenterbrokers;
-        List<Cloudlet> cloudletList = new LinkedList<Cloudlet>();
-		List<Vm> vmList = new LinkedList<Vm>();
 
 		for(int i=0; i<brokerArray.size(); i++){
 			cloudletList.addAll(brokerArray.get(i).getCloudletReceivedList());
-			vmList.addAll(brokerArray.get(i).getVmList());//getVmsCreatedList());//getVmList());
+			vmList.addAll(brokerArray.get(i).getVmList());
 		}
+        	CloudSim.stopSimulation();
+        	Log.printLine(Application.class.getName() + " finished!");
+	}
 
-        CloudSim.stopSimulation();
-        printCloudletList(cloudletList, vmList);
+	public static void main(String[] args) {
 
-        Log.printLine(Application.class.getName() + " finished!");
+		Application tsapp = new Application();//cloudletList, vmList);
+		tsapp.Logfile(args[0]);
+		tsapp.Run(args[1]);
+        	tsapp.PrintCloudlets();
+        	tsapp.PrintPerformances();
 	}
 }
 
