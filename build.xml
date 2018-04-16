@@ -1,16 +1,31 @@
 <!-- created by mazw 20180305 -->
 <project name="taskscheduling in cloudsim" basedir="." default="compress">
     <description> This is the build file for TaskScheduling on CloudSim</description>
+	<!--
+    <property name="cloudsim.v4.lib.dir" location="/opt/cloudsim/4.0/lib"/>
+	-->
     <property name="class.dir" location="classes" />
     <property name="src.dir" location="src/" />
     <property name="jar.dir" location="lib/" />
 
+    <!--path id="classpath">
+        <fileset dir="../4.0/jars">
+            <include name="*.jar" />
+        </fileset>
+    </path-->
+
     <path id="classpath">
+		<!--
+		<pathelement location="${cloudsim.v4.lib.dir}/cloudsim-4.0.jar"/>
+		<pathelement location="${cloudsim.v4.lib.dir}/cloudsim-examples-4.0.jar"/>
+		-->
 		<pathelement location="${jar.dir}/cloudsim-4.0.jar"/>
 		<pathelement location="${jar.dir}/commons-math3-3.6.1.jar"/>
+		<pathelement location="${jar.dir}/junit-4.10.jar"/>
+		<pathelement location="${jar.dir}/opencsv-4.1.jar"/>
 		<pathelement location="${jar.dir}/dom4j-2.1.0.jar"/>
-		<pathelement location="${jar.dir}/taskscheduling.jar"/>
 		<pathelement location="${jar.dir}/jaxen-1.1.6.jar"/>
+		<pathelement location="${jar.dir}/taskscheduling.jar"/>
         <!--fileset dir="${class.dir}/taskscheduling/GA">
             <include name="*.class" />
         </fileset-->
@@ -41,7 +56,7 @@
 				memoryInitialSize="128m" 
 				memoryMaximumSize="512m"
 				fork="true">
-			<exclude name="**/trash/**"/>
+			<exclude name="**/version/**"/>
  			<classpath refid="classpath"/>
 			<compilerarg value="-Xlint:deprecation" />
 		</javac>
@@ -49,8 +64,7 @@
 
 
 	<target name="compress" depends="build">
-        <echo>Compiling a new jar file, named: "taskscheduling.jar".</echo>
-        <echo>This jar file contains taskscheduling classes only.</echo>
+        <echo>Compiling "taskscheduling.jar" ...</echo>
         <jar destfile="${jar.dir}/taskscheduling.jar" basedir="${class.dir}" />
     </target>
 
@@ -60,11 +74,18 @@
     </target>
 
 	<target name="ga" description="Genetic Algorithm" >
+        <echo>        Executing "taskscheduling.jar" </echo>
+		<echo>    -------------------------------------- </echo>
+        <echo>    | log file  : log/taskscheduling.log |</echo>
+        <echo>    | configure : etc/establishment.xml  |</echo>
+		<echo>    -------------------------------------- </echo>
+		<echo/>
 		<java classname="lab.cloudsim.taskscheduling.Application" fork="false">
 			<classpath refid="classpath"/>
 			<classpath path="${class.dir}"/>
+			<arg value="log/taskscheduling.log"/>
+			<arg value="etc/establishment.xml"/>
+			<!--classpath location="${jar.dir}/taskscheduling.jar"/-->
 		</java>
 	</target>
-
-
 </project>
