@@ -7,3 +7,6 @@ Hence, Genetic algorithm can be used to create a binding relationship which can 
 
 
 
+# using ant to run:
+$ ant build
+$ ant ga
